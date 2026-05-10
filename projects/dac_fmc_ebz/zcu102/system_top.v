@@ -102,13 +102,20 @@ module system_top #(
   output          spi_clk,
   output          spi_en,
 
+  
+  output          spi1_csn,
+  input           spi1_miso,
+  output          spi1_mosi,
+  output          spi1_clk,
+
+  output          eth_phy_mdc,
+  inout           eth_phy_mdio,
+  output          eth_phy_resetn,
+  input           eth_phy_intn,
+
   inout   [ 3:0]  dac_ctrl,
 
-  output          pmod_spi_clk,
-  output          pmod_spi_csn,
-  output          pmod_spi_mosi,
-  input           pmod_spi_miso,
-  inout   [ 4:0]  pmod_gpio
+  inout   [ 3:0]  pmod_gpio
 );
 
   // internal signals
@@ -117,10 +124,12 @@ module system_top #(
   wire    [94:0]  gpio_o;
   wire    [94:0]  gpio_t;
   wire    [ 1:0]  spi0_csn;
-  wire    [ 2:0]  spi1_csn;
   wire            tx_ref_clk;
   wire            tx_sysref;
   wire    [ 1:0]  tx_sync;
+  wire            eth_phy_mdio_i;
+  wire            eth_phy_mdio_o;
+  wire            eth_phy_mdio_t;
   // spi
 
   // spi_en is active ...
@@ -179,28 +188,43 @@ module system_top #(
   *        3  H14   FMC_TXEN_1   NC
   */
 
-  /* PMOD GPIOs 47-51 */
+  /* PMOD GPIOs 48-51 */
   ad_iobuf #(
     .DATA_WIDTH(4)
   ) i_iobuf_pmod (
-    .dio_t (gpio_t[47+:4]),
-    .dio_i (gpio_o[47+:4]),
-    .dio_o (gpio_i[47+:4]),
+    .dio_t (gpio_t[48+:4]),
+    .dio_i (gpio_o[48+:4]),
+    .dio_o (gpio_i[48+:4]),
     .dio_p (pmod_gpio));
 
+  ad_iobuf #(
+    .DATA_WIDTH(1)
+  ) i_iobuf_eth_mdio (
+    .dio_t (eth_phy_mdio_t),
+    .dio_i (eth_phy_mdio_o),
+    .dio_o (eth_phy_mdio_i),
+    .dio_p (eth_phy_mdio));
+
   /* PMOD SPI */
-  assign pmod_spi_csn = spi1_csn[0];
 
   /* Board GPIOS. Buttons, LEDs, etc... */
   assign gpio_i[20: 8] = gpio_bd_i;
   assign gpio_bd_o = gpio_o[7:0];
+  assign eth_phy_resetn = gpio_o[54];
+  assign gpio_i[53] = eth_phy_intn;
+  assign gpio_i[52] = gpio_o[52];
+  assign gpio_i[54] = gpio_o[54];
 
-  assign gpio_i[94:52] = gpio_o[94:52];
-  assign gpio_i[46:32] = gpio_o[46:32];
+  assign gpio_i[94:55] = gpio_o[94:55];
+  assign gpio_i[47:32] = gpio_o[47:32];
   assign gpio_i[31:26] = gpio_o[31:26];
   assign gpio_i[ 7: 0] = gpio_o[7:0];
 
   system_wrapper i_system_wrapper (
+    .eth_phy_mdc (eth_phy_mdc),
+    .eth_phy_mdio_i (eth_phy_mdio_i),
+    .eth_phy_mdio_o (eth_phy_mdio_o),
+    .eth_phy_mdio_t (eth_phy_mdio_t),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .spi0_csn (spi0_csn),
@@ -208,9 +232,9 @@ module system_top #(
     .spi0_mosi (spi_mosi),
     .spi0_sclk (spi_clk),
     .spi1_csn (spi1_csn),
-    .spi1_miso (pmod_spi_miso),
-    .spi1_mosi (pmod_spi_mosi),
-    .spi1_sclk (pmod_spi_clk),
+    .spi1_miso (spi1_miso),
+    .spi1_mosi (spi1_mosi),
+    .spi1_sclk (spi1_clk),
     .tx_data_0_n (tx_data_n[0]),
     .tx_data_0_p (tx_data_p[0]),
     .tx_data_1_n (tx_data_n[1]),

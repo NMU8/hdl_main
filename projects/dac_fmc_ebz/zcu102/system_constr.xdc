@@ -52,22 +52,28 @@ set_property  -dict {PACKAGE_PIN  R4} [get_ports tx_data_p[4]]                  
 set_property  -dict {PACKAGE_PIN  R3} [get_ports tx_data_n[4]]                                          ; ## B33  FMC_HPC0_DP7_C2M_N        MGTHTXN2_228_N3
 
 # PL PMOD 1 header
-set_property  -dict {PACKAGE_PIN  AH13 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[0]]  ; ## GPIO 1
-set_property  -dict {PACKAGE_PIN  AG13 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[1]]  ; ## GPIO 2
-set_property  -dict {PACKAGE_PIN  AA16 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[2]]  ; ## GPIO 3
-set_property  -dict {PACKAGE_PIN  AB16 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[3]]  ; ## GPIO 4
-set_property  -dict {PACKAGE_PIN  AE1 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[4]]  ; ## UART DIR
-set_property  -dict {PACKAGE_PIN  L14 IOSTANDARD LVCMOS18} [get_ports pmod_spi_clk]                     ; ## PMOD1_0                        IO_L8N_HDGC_AD4N_47_D20
-set_property  -dict {PACKAGE_PIN  H16 IOSTANDARD LVCMOS18} [get_ports pmod_spi_csn]                     ; ## PMOD1_1                        IO_L8P_HDGC_AD4P_47_E20
-set_property  -dict {PACKAGE_PIN  J14 IOSTANDARD LVCMOS18} [get_ports pmod_spi_mosi]                    ; ## PMOD1_2                        IO_L7N_HDGC_AD5N_47_D22
-set_property  -dict {PACKAGE_PIN  J15 IOSTANDARD LVCMOS18} [get_ports pmod_spi_miso]                     ; ## PMOD1_7                        IO_L4P_AD8P_47_J19
+set_property  -dict {PACKAGE_PIN  D15 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[0]]  ; ## PMOD1_4   IO_L6N_HDGC_AD6N_47_F20
+set_property  -dict {PACKAGE_PIN  E15 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[1]]  ; ## PMOD1_5   IO_L6P_HDGC_AD6P_47_G20
+set_property  -dict {PACKAGE_PIN  L14 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[2]]  ; ## PMOD1_6   IO_L4N_AD8N_47_J20
+set_property  -dict {PACKAGE_PIN  D16 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[3]]  ; ## PMOD1_7   IO_L4P_AD8P_47_J19
 
+
+set_property  -dict {PACKAGE_PIN  H16  IOSTANDARD LVCMOS18} [get_ports spi1_csn]
+set_property  -dict {PACKAGE_PIN  J15  IOSTANDARD LVCMOS18} [get_ports spi1_miso]
+set_property  -dict {PACKAGE_PIN  J14  IOSTANDARD LVCMOS18} [get_ports spi1_mosi]
+set_property  -dict {PACKAGE_PIN  L15  IOSTANDARD LVCMOS18} [get_ports spi1_clk]
+
+# GEM3 PHY control on SOM carrier B2B1
+set_property  -dict {PACKAGE_PIN F12 IOSTANDARD LVCMOS18} [get_ports eth_phy_mdc]     ; ## B2B1_124 MDC   IO_L6P_HDGC_AD6P_46
+set_property  -dict {PACKAGE_PIN E12 IOSTANDARD LVCMOS18} [get_ports eth_phy_mdio]    ; ## B2B1_126 MDIO  IO_L6N_HDGC_AD6N_46
+set_property  -dict {PACKAGE_PIN H13 IOSTANDARD LVCMOS18} [get_ports eth_phy_resetn]  ; ## B2B1_92  RESET IO_L3P_AD9P_46
+set_property  -dict {PACKAGE_PIN H12 IOSTANDARD LVCMOS18} [get_ports eth_phy_intn]    ; ## B2B1_94  INT   IO_L3N_AD9N_46
 # clocks
 
 # Max lane rate of 15.4 Gbps
 create_clock -name tx_ref_clk   -period  2.597 [get_ports tx_ref_clk_p]
 
-# Assumption is that REFCLK and SYSREF have similar propagation delay,
+# Assumption is that REFCLK and SYSREF have similar propagation delay, 
 # and the SYSREF is a source synchronous Center-Aligned signal to REFCLK
 set_input_delay -clock [get_clocks tx_ref_clk] \
   [expr [get_property  PERIOD [get_clocks tx_ref_clk]] / 2] \

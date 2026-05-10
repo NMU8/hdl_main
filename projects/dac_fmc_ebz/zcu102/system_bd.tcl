@@ -12,6 +12,30 @@ source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source ../common/dac_fmc_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
+# Enable GEM3 Ethernet via MIO 64..75 (RGMII routed on the SOM B2B connector).
+# The shared MIO bank also muxes USB1 on these pins, so GEM3 must be selected here.
+# The AR8031 control interface uses ENET3 MDIO through EMIO plus two GPIO EMIOs
+# for PHY reset and interrupt.
+set_property -dict [list \
+  CONFIG.PSU__ENET0__PERIPHERAL__ENABLE {0} \
+  CONFIG.PSU__ENET0__GRP_MDIO__ENABLE {0} \
+  CONFIG.PSU__ENET3__PERIPHERAL__ENABLE {1} \
+  CONFIG.PSU__ENET3__PERIPHERAL__IO {MIO 64 .. 75} \
+  CONFIG.PSU__ENET3__GRP_MDIO__ENABLE {1} \
+  CONFIG.PSU__ENET3__GRP_MDIO__IO {EMIO} \
+  CONFIG.PSU__ENET3__FIFO__ENABLE {0} \
+  CONFIG.PSU__ENET3__PTP__ENABLE {0}] [get_bd_cells sys_ps8]
+
+create_bd_port -dir O eth_phy_mdc
+create_bd_port -dir I eth_phy_mdio_i
+create_bd_port -dir O eth_phy_mdio_o
+create_bd_port -dir O eth_phy_mdio_t
+
+ad_connect eth_phy_mdc sys_ps8/emio_enet3_mdio_mdc
+ad_connect eth_phy_mdio_i sys_ps8/emio_enet3_mdio_i
+ad_connect eth_phy_mdio_o sys_ps8/emio_enet3_mdio_o
+ad_connect eth_phy_mdio_t sys_ps8/emio_enet3_mdio_t
+
 set ADI_DEVICE_CODE $ad_project_params(DEVICE_CODE)
 
 ad_ip_parameter util_dac_jesd204_xcvr CONFIG.QPLL_REFCLK_DIV 1
@@ -37,6 +61,7 @@ ad_ip_parameter util_dac_jesd204_xcvr CONFIG.QPLL_LPF        0x31D
 ad_ip_parameter dac_jesd204_link/tx CONFIG.SYSREF_IOB       false
 ad_ip_parameter dac_dma CONFIG.DMA_DATA_WIDTH_SRC           128
 
+#system ID
 
 set ADI_DAC_DEVICE $::env(ADI_DAC_DEVICE)
 set ADI_DAC_MODE $::env(ADI_DAC_MODE)

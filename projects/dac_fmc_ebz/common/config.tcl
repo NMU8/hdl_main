@@ -10,7 +10,7 @@
 
 # Default:
 set device AD9172
-set mode   04
+set mode   10
 
 if [info exists ::env(ADI_DAC_DEVICE)] {
   set device $::env(ADI_DAC_DEVICE)

@@ -108,7 +108,7 @@ module system_top #(
   output          pmod_spi_csn,
   output          pmod_spi_mosi,
   input           pmod_spi_miso,
-  inout   [ 3:0]  pmod_gpio
+  inout   [ 4:0]  pmod_gpio
 );
 
   // internal signals
@@ -129,7 +129,7 @@ module system_top #(
   // If you are planning to build a bitstream for just one of those boards you
   // can hardwire the logic level here.
   //
-  assign spi_en = (DEVICE_CODE <= 2);
+  assign spi_en = 0;
 
   //                                        9135/9144/9172
   assign spi_csn_dac  = spi0_csn[1];
@@ -179,13 +179,13 @@ module system_top #(
   *        3  H14   FMC_TXEN_1   NC
   */
 
-  /* PMOD GPIOs 48-51 */
+  /* PMOD GPIOs 47-51 */
   ad_iobuf #(
     .DATA_WIDTH(4)
   ) i_iobuf_pmod (
-    .dio_t (gpio_t[48+:4]),
-    .dio_i (gpio_o[48+:4]),
-    .dio_o (gpio_i[48+:4]),
+    .dio_t (gpio_t[47+:4]),
+    .dio_i (gpio_o[47+:4]),
+    .dio_o (gpio_i[47+:4]),
     .dio_p (pmod_gpio));
 
   /* PMOD SPI */
@@ -196,7 +196,7 @@ module system_top #(
   assign gpio_bd_o = gpio_o[7:0];
 
   assign gpio_i[94:52] = gpio_o[94:52];
-  assign gpio_i[47:32] = gpio_o[47:32];
+  assign gpio_i[46:32] = gpio_o[46:32];
   assign gpio_i[31:26] = gpio_o[31:26];
   assign gpio_i[ 7: 0] = gpio_o[7:0];
 

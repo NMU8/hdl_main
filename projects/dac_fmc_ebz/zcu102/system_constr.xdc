@@ -52,10 +52,11 @@ set_property  -dict {PACKAGE_PIN  R4} [get_ports tx_data_p[4]]                  
 set_property  -dict {PACKAGE_PIN  R3} [get_ports tx_data_n[4]]                                          ; ## B33  FMC_HPC0_DP7_C2M_N        MGTHTXN2_228_N3
 
 # PL PMOD 1 header
-set_property  -dict {PACKAGE_PIN  D15 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[0]]  ; ## PMOD1_4   IO_L6N_HDGC_AD6N_47_F20
-set_property  -dict {PACKAGE_PIN  E15 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[1]]  ; ## PMOD1_5   IO_L6P_HDGC_AD6P_47_G20
-set_property  -dict {PACKAGE_PIN  L14 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[2]]  ; ## PMOD1_6   IO_L4N_AD8N_47_J20
-set_property  -dict {PACKAGE_PIN  D16 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[3]]  ; ## PMOD1_7   IO_L4P_AD8P_47_J19
+set_property  -dict {PACKAGE_PIN  AH13 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[0]]  ; ## PMOD1_4   IO_L6N_HDGC_AD6N_47_F20
+set_property  -dict {PACKAGE_PIN  AG13 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[1]]  ; ## PMOD1_5   IO_L6P_HDGC_AD6P_47_G20
+set_property  -dict {PACKAGE_PIN  AA16 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[2]]  ; ## PMOD1_6   IO_L4N_AD8N_47_J20
+set_property  -dict {PACKAGE_PIN  AB16 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[3]]  ; ## PMOD1_7   IO_L4P_AD8P_47_J19
+set_property  -dict {PACKAGE_PIN  AE1 IOSTANDARD LVCMOS18} [get_ports pmod_gpio[4]]  ; ## PMOD1_7   IO_L4P_AD8P_47_J19
 
 
 set_property  -dict {PACKAGE_PIN  H16  IOSTANDARD LVCMOS18} [get_ports spi1_csn]

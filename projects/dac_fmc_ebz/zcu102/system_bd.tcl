@@ -5,7 +5,7 @@
 
 ## Offload attributes
 set dac_offload_type 0                ; ## BRAM
-set dac_offload_size [expr 256*1024]  ; ## 256 kB
+set dac_offload_size [expr 2*256*1024]  ; ## 256 kB
 
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl

@@ -115,7 +115,7 @@ module system_top #(
 
   inout   [ 3:0]  dac_ctrl,
 
-  inout   [ 3:0]  pmod_gpio
+  inout   [ 4:0]  pmod_gpio
 );
 
   // internal signals
@@ -190,11 +190,11 @@ module system_top #(
 
   /* PMOD GPIOs 48-51 */
   ad_iobuf #(
-    .DATA_WIDTH(4)
+    .DATA_WIDTH(5)
   ) i_iobuf_pmod (
-    .dio_t (gpio_t[48+:4]),
-    .dio_i (gpio_o[48+:4]),
-    .dio_o (gpio_i[48+:4]),
+    .dio_t (gpio_t[48+:5]),
+    .dio_i (gpio_o[48+:5]),
+    .dio_o (gpio_i[48+:5]),
     .dio_p (pmod_gpio));
 
   ad_iobuf #(
@@ -212,7 +212,6 @@ module system_top #(
   assign gpio_bd_o = gpio_o[7:0];
   assign eth_phy_resetn = gpio_o[54];
   assign gpio_i[53] = eth_phy_intn;
-  assign gpio_i[52] = gpio_o[52];
   assign gpio_i[54] = gpio_o[54];
 
   assign gpio_i[94:55] = gpio_o[94:55];
